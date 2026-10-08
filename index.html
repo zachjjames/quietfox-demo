@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QuietFox</title>
+<meta name="description" content="QuietFox pairs you with another adult for a calm, anonymous voice call before you sleep. Peer support, not therapy. 18+.">
+<meta name="theme-color" content="#12142B">
+
+<!-- Browser tab and home-screen icons -->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+<!-- Link previews (Facebook, iMessage, Discord, X, LinkedIn...).
+     Social sites need a FULL web address here, so when QuietFox is online, change
+     share-image.jpg to something like https://yourdomain.com/share-image.jpg -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="QuietFox">
+<meta property="og:description" content="Someone to talk to before you sleep. Calm, anonymous voice calls with other adults.">
+<meta property="og:image" content="share-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The QuietFox logo: two red foxes sitting in a forest at night, with the words Quiet Fox, Lend an ear">
+<meta name="twitter:card" content="summary_large_image">
+<!--
+  QuietFox: interactive demo
+  A front-end preview of QuietFox that runs entirely in the browser on sample data.
+  There is no server: matching, voice calls, encrypted messaging, accounts, and the
+  safety and moderation system live in the private codebase and are not included here.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="chrome-none">
+
+<!-- ===== Icon sprite: use with <svg class="icon"><use href="#i-name"></use></svg> ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></symbol>
+  <symbol id="i-mic-off" viewBox="0 0 24 24"><path d="M3 3l18 18M9 9v2a3 3 0 0 0 5.1 2.1M15 9.3V6a3 3 0 0 0-5.7-1.3M18.5 11a6.5 6.5 0 0 1-1.2 3.8M5.5 11a6.5 6.5 0 0 0 9.8 5.6M12 17.5V21"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M5.6 5.6l3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+  <symbol id="i-end" viewBox="0 0 24 24"><path d="M3 14.5c5-4.7 13-4.7 18 0l-2.3 2.6-3.4-1.3v-2.6a10 10 0 0 0-6.6 0v2.6l-3.4 1.3z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-skip" viewBox="0 0 24 24"><path d="M5 5l9 7-9 7zM19 5v14"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 6.1A9.7 9.7 0 0 1 12 6c5 0 9 6 9 6a17 17 0 0 1-3 3.4M6.6 7.6C4.4 9.1 3 12 3 12s4 6 9 6a8.6 8.6 0 0 0 4.3-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></symbol>
+  <symbol id="i-feedback" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12z"/><path d="M9 10.5h6M9 13.5h4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-2.5-6.5z"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-thumb-up" viewBox="0 0 24 24"><path d="M7 10v11H4V10zM7 10l4-7a2.5 2.5 0 0 1 2.5 3L13 10h5.5a2 2 0 0 1 2 2.4l-1.4 7A2 2 0 0 1 17.1 21H7"/></symbol>
+  <symbol id="i-thumb-down" viewBox="0 0 24 24"><path d="M17 14V3h3v11zM17 14l-4 7a2.5 2.5 0 0 1-2.5-3l.5-4H5.5a2 2 0 0 1-2-2.4l1.4-7A2 2 0 0 1 6.9 3H17"/></symbol>
+  <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
+  <symbol id="i-user-x" viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M3 20.5a7 7 0 0 1 12.5-4.3M17 14l4 4M21 14l-4 4"/></symbol>
+  <symbol id="i-admin" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z"/></symbol>
+  <!-- preset avatars -->
+  <symbol id="a-fox" viewBox="0 0 24 24"><path d="M4 5l4 4h8l4-4v8a8 8 0 0 1-16 0z"/><path d="M9.5 13h.01M14.5 13h.01M11 16.5h2"/></symbol>
+  <symbol id="a-owl" viewBox="0 0 24 24"><path d="M6 4l2.5 3h7L18 4v10a6 6 0 0 1-12 0z"/><circle cx="9.5" cy="11" r="1.8"/><circle cx="14.5" cy="11" r="1.8"/><path d="M11.2 14.2L12 15.5l.8-1.3"/></symbol>
+  <symbol id="a-cat" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7"/><path d="M6.5 9L6 3.5l4.5 3.3M17.5 9L18 3.5l-4.5 3.3M9.5 13h.01M14.5 13h.01M11 16h2"/></symbol>
+  <symbol id="a-bear" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="6.5" r="2.5"/><path d="M9.5 12.5h.01M14.5 12.5h.01"/><ellipse cx="12" cy="16" rx="2" ry="1.4"/></symbol>
+  <symbol id="a-rabbit" viewBox="0 0 24 24"><circle cx="12" cy="15.5" r="6"/><rect x="8" y="2" width="3" height="9" rx="1.5"/><rect x="13" y="2" width="3" height="9" rx="1.5"/><path d="M10 15h.01M14 15h.01M11.2 17.5h1.6"/></symbol>
+  <symbol id="a-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M17 4v2M16 5h2"/></symbol>
+</svg>
+
+<!-- ===== App chrome (shown on signed-in screens) ===== -->
+<header class="topbar">
+  <a class="logo" href="#home" data-go="home"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+  <div class="row gap-8">
+    <button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button>
+    <button class="help-btn" data-open="help-sheet" aria-label="Get help now"><svg class="icon"><use href="#i-help"/></svg>Help</button>
+  </div>
+</header>
+
+<aside class="sidebar" aria-label="Main">
+  <a class="logo" href="#home" data-go="home"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+  <nav class="side-nav">
+    <button class="side-link" data-go="home" data-nav="home"><svg class="icon"><use href="#i-moon"/></svg>Talk</button>
+    <button class="side-link" data-go="connections" data-nav="connections"><svg class="icon"><use href="#i-chat"/></svg>Connections<span class="badge" aria-label="1 new request">1</span></button>
+    <button class="side-link" data-go="settings" data-nav="settings"><svg class="icon"><use href="#i-settings"/></svg>Settings</button>
+  </nav>
+  <div style="margin-top: auto" class="stack gap-12">
+    <button class="side-link" data-open="feedback-sheet"><svg class="icon"><use href="#i-feedback"/></svg>Send feedback</button>
+    <button class="help-btn" data-open="help-sheet" style="justify-content: center"><svg class="icon"><use href="#i-help"/></svg>Help now</button>
+    <p class="tiny muted">Peer support, not therapy.</p>
+    <p class="copyright" style="font-size: 12px">&copy; 2026 QuietFox. All rights reserved.</p>
+  </div>
+</aside>
+
+<main id="main">
+
+<!-- =========================================================
+     PUBLIC SCREENS
+     ========================================================= -->
+
+<!-- Landing page -->
+<section class="screen" id="landing" data-chrome="none" aria-label="Welcome">
+  <header class="landing-nav">
+    <a class="logo" href="#landing" data-go="landing"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+    <div class="row gap-8">
+      <button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button>
+      <button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button>
+      <button class="btn btn-text" data-go="login">Log in</button>
+      <button class="btn btn-primary" data-go="signup" style="min-height: 44px; padding: 0 20px">Sign up</button>
+    </div>
+  </header>
+
+  <div class="landing-hero">
+    <div>
+      <h1>Someone to talk to before you sleep.</h1>
+      <p class="lede">QuietFox pairs you with another adult for a calm, anonymous voice call. No video, no real names, no pressure.</p>
+      <div class="row gap-12" style="margin-top: 32px; flex-wrap: wrap">
+        <button class="btn btn-primary" data-go="signup">Sign up free</button>
+        <button class="btn btn-ghost" data-go="login">Log in</button>
+      </div>
+      <p class="tiny muted" style="margin-top: 16px">For adults 18 and older. Peer support, not therapy.</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="moon-ring"><div><span class="logo-big"></span></div></div>
+    </div>
+  </div>
+
+  <section class="landing-section" aria-labelledby="how-title">
+    <h2 id="how-title">How a call works</h2>
+    <ol class="steps">
+      <li><div><h3>Tap Start talking</h3><p>We match you with another adult who's awake right now, anywhere in the world.</p></div></li>
+      <li><div><h3>Talk, voice only</h3><p>Calls are one-on-one and never recorded. Skip unlocks after a minute, and you tell us why.</p></div></li>
+      <li><div><h3>Stay connected if you both want</h3><p>Send a request after the call. Messaging opens only if you both say yes.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="landing-section" aria-labelledby="safety-title">
+    <h2 id="safety-title">Built to keep every call kind</h2>
+    <div class="safety-list">
+      <div><svg class="icon"><use href="#i-shield"/></svg><div><h3>Adults only</h3><p>An age check and phone verification at sign-up, with one account per phone number.</p></div></div>
+      <div><svg class="icon"><use href="#i-lock"/></svg><div><h3>Encrypted end to end</h3><p>Calls and messages are locked on your device before they leave it. Only you and the other person can hear or read them, not even QuietFox.</p></div></div>
+      <div><svg class="icon"><use href="#i-flag"/></svg><div><h3>Report and block anywhere</h3><p>Every call and chat has a report button, and a person reviews every report. No real names, and messages with contact info are blocked.</p></div></div>
+      <div><svg class="icon"><use href="#i-help"/></svg><div><h3>Help is one tap away</h3><p>Crisis lines are reachable from every screen, any time of night.</p></div></div>
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    <span class="copyright">&copy; 2026 QuietFox. All rights reserved.</span>
+    <nav aria-label="Legal">
+      <a href="#guidelines" data-go="guidelines">Community guidelines</a>
+      <a href="#terms" data-go="terms">Terms of Service</a>
+      <a href="#privacy" data-go="privacy">Privacy Policy</a>
+      <a href="#contact" data-go="contact">Contact</a>
+      <a href="#" data-open="feedback-sheet">Send feedback</a>
+    </nav>
+  </footer>
+</section>
+
+<!-- Sign up (step 1 of 4) -->
+<section class="screen" id="signup" data-chrome="none" aria-label="Create your account">
+  <div class="auth">
+    <div class="auth-top">
+      <button class="icon-btn" data-go="landing" aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <a class="logo" href="#landing" data-go="landing"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <form class="auth-card" id="signup-form" novalidate>
+      <div class="progress" aria-label="Step 1 of 4"><span class="done"></span><span></span><span></span><span></span></div>
+      <div>
+        <h1>Create your account</h1>
+        <p class="muted" style="margin-top: 6px">Your email stays private. Other people only see the display name you pick later.</p>
+      </div>
+      <div class="field">
+        <label for="su-email">Email</label>
+        <input class="input" id="su-email" type="email" autocomplete="email" placeholder="you@example.com">
+        <p class="error" id="su-email-err"></p>
+      </div>
+      <div class="field">
+        <label for="su-pass">Password</label>
+        <input class="input" id="su-pass" type="password" autocomplete="new-password" aria-describedby="su-pass-hint">
+        <p class="hint" id="su-pass-hint">At least 8 characters.</p>
+        <p class="error" id="su-pass-err"></p>
+      </div>
+      <div class="field">
+        <label for="su-dob">Date of birth</label>
+        <input class="input" id="su-dob" type="date" aria-describedby="su-dob-hint">
+        <p class="hint" id="su-dob-hint">QuietFox is for adults 18 and older.</p>
+        <p class="error" id="su-dob-err"></p>
+      </div>
+      <label class="check"><input type="checkbox" id="su-terms"><span>I agree to the <a href="#terms" data-go="terms">Terms of Service</a> and <a href="#privacy" data-go="privacy">Privacy Policy</a>.</span></label>
+      <label class="check"><input type="checkbox" id="su-guide"><span>I'll follow the <a href="#guidelines" data-go="guidelines">Community guidelines</a>.</span></label>
+      <p class="error" id="su-check-err"></p>
+      <div class="alert alert-error" data-form-alert hidden role="alert"><svg class="icon"><use href="#i-alert"/></svg><span></span></div>
+      <button class="btn btn-primary btn-block" type="submit">Create account</button>
+      <p class="center small muted">Already have an account? <a href="#login" data-go="login">Log in</a></p>
+    </form>
+  </div>
+</section>
+
+<!-- Phone verification (step 2 of 4) -->
+<section class="screen" id="verify" data-chrome="none" aria-label="Verify your phone">
+  <div class="auth">
+    <div class="auth-top">
+      <button class="icon-btn" data-go="signup" aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <a class="logo" href="#landing" data-go="landing"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <div class="auth-card">
+      <div class="progress" aria-label="Step 2 of 4"><span class="done"></span><span class="done"></span><span></span><span></span></div>
+      <div>
+        <h1>Verify your phone</h1>
+        <p class="muted" style="margin-top: 6px">We text you a 6-digit code. Each phone number can have one QuietFox account, and we never show it to anyone.</p>
+      </div>
+      <form id="phone-form" class="stack gap-12" novalidate>
+        <div class="field">
+          <label for="v-phone">Mobile number</label>
+          <input class="input" id="v-phone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567">
+          <p class="error" id="v-phone-err"></p>
+        </div>
+        <div class="alert alert-error" data-form-alert hidden role="alert"><svg class="icon"><use href="#i-alert"/></svg><span></span></div>
+        <button class="btn btn-primary btn-block" type="submit">Text me a code</button>
+      </form>
+      <form id="code-form" class="stack gap-12" hidden novalidate>
+        <p class="small">Code sent to <strong id="v-sent-to"></strong>. <button type="button" class="btn-text" id="v-change" style="min-height: 0; padding: 0; background: none; border: 0; color: var(--lamp); cursor: pointer; font-weight: 700">Change number</button></p>
+        <fieldset style="border: 0; margin: 0; padding: 0">
+          <legend class="label" style="margin-bottom: 6px">6-digit code</legend>
+          <div class="code-inputs">
+            <input class="input" inputmode="numeric" maxlength="1" aria-label="Digit 1">
+            <input class="input" inputmode="numeric" maxlength="1" aria-label="Digit 2">
+            <input class="input" inputmode="numeric" maxlength="1" aria-label="Digit 3">
+            <input class="input" inputmode="numeric" maxlength="1" aria-label="Digit 4">
+            <input class="input" inputmode="numeric" maxlength="1" aria-label="Digit 5">
+            <input class="input" inputmode="numeric" maxlength="1" aria-label="Digit 6">
+          </div>
+        </fieldset>
+        <p class="error" id="v-code-err"></p>
+        <div class="alert alert-error" data-form-alert hidden role="alert"><svg class="icon"><use href="#i-alert"/></svg><span></span></div>
+        <button class="btn btn-primary btn-block" type="submit">Verify</button>
+        <button class="btn btn-text" type="button" id="v-resend">Send a new code</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- House rules (step 3 of 4) -->
+<section class="screen" id="rules" data-chrome="none" aria-label="House rules">
+  <div class="auth">
+    <div class="auth-top">
+      <button class="icon-btn" data-go="verify" aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <a class="logo" href="#landing" data-go="landing"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <div class="auth-card">
+      <div class="progress" aria-label="Step 3 of 4"><span class="done"></span><span class="done"></span><span class="done"></span><span></span></div>
+      <div>
+        <h1>A few house rules</h1>
+        <p class="muted" style="margin-top: 6px">They keep QuietFox a calm place to land.</p>
+      </div>
+      <ul class="rule-list">
+        <li><span class="avatar"><svg class="icon"><use href="#i-heart"/></svg></span><div><h3>Be gentle</h3><p>Everyone here is having some kind of day. Listen as much as you talk.</p></div></li>
+        <li><span class="avatar"><svg class="icon"><use href="#i-eye-off"/></svg></span><div><h3>Stay anonymous</h3><p>Don't share your real name, number, address, or socials. Messages that include them are blocked.</p></div></li>
+        <li><span class="avatar"><svg class="icon"><use href="#i-skip"/></svg></span><div><h3>Skipping needs a reason</h3><p>You can skip after a minute. Telling us why helps us spot people who aren't being kind.</p></div></li>
+        <li><span class="avatar"><svg class="icon"><use href="#i-moon"/></svg></span><div><h3>A friend, not a therapist</h3><p>QuietFox is peer support. If you're in crisis, tap Help any time to reach a trained counselor.</p></div></li>
+      </ul>
+      <button class="btn btn-primary btn-block" data-go="profile-setup">I agree</button>
+    </div>
+  </div>
+</section>
+
+<!-- Profile setup (step 4 of 4) -->
+<section class="screen" id="profile-setup" data-chrome="none" aria-label="Set up your profile">
+  <div class="auth">
+    <div class="auth-top">
+      <button class="icon-btn" data-go="rules" aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <a class="logo" href="#landing" data-go="landing"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <form class="auth-card" id="profile-form" novalidate>
+      <div class="progress" aria-label="Step 4 of 4"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div>
+      <div>
+        <h1>Set up your profile</h1>
+        <p class="muted" style="margin-top: 6px">This is what people see on a call. Keep it anonymous.</p>
+      </div>
+      <div class="field">
+        <label for="p-name">Display name</label>
+        <input class="input" id="p-name" maxlength="24" placeholder="Night Owl" aria-describedby="p-name-hint">
+        <p class="hint" id="p-name-hint">Not your real name.</p>
+        <p class="error" id="p-name-err"></p>
+      </div>
+      <div class="field">
+        <span class="label" id="avatar-label">Pick an icon</span>
+        <div class="avatar-grid" role="radiogroup" aria-labelledby="avatar-label" data-avatar-group>
+          <button type="button" class="avatar-pick" role="radio" aria-checked="true" aria-label="Fox" data-avatar="a-fox"><svg class="icon"><use href="#a-fox"/></svg></button>
+          <button type="button" class="avatar-pick" role="radio" aria-checked="false" aria-label="Owl" data-avatar="a-owl"><svg class="icon"><use href="#a-owl"/></svg></button>
+          <button type="button" class="avatar-pick" role="radio" aria-checked="false" aria-label="Cat" data-avatar="a-cat"><svg class="icon"><use href="#a-cat"/></svg></button>
+          <button type="button" class="avatar-pick" role="radio" aria-checked="false" aria-label="Bear" data-avatar="a-bear"><svg class="icon"><use href="#a-bear"/></svg></button>
+          <button type="button" class="avatar-pick" role="radio" aria-checked="false" aria-label="Rabbit" data-avatar="a-rabbit"><svg class="icon"><use href="#a-rabbit"/></svg></button>
+          <button type="button" class="avatar-pick" role="radio" aria-checked="false" aria-label="Moon" data-avatar="a-moon"><svg class="icon"><use href="#a-moon"/></svg></button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="p-bio">Short bio (optional)</label>
+        <textarea class="input" id="p-bio" maxlength="120" placeholder="What helps you unwind?"></textarea>
+      </div>
+      <div class="field">
+        <span class="label">Interests (optional)</span>
+        <div class="chips" data-chip-group>
+          <button type="button" class="chip" aria-pressed="false">Music</button>
+          <button type="button" class="chip" aria-pressed="false">Movies</button>
+          <button type="button" class="chip" aria-pressed="false">Gaming</button>
+          <button type="button" class="chip" aria-pressed="false">Books</button>
+          <button type="button" class="chip" aria-pressed="false">Rain sounds</button>
+          <button type="button" class="chip" aria-pressed="false">Walks</button>
+          <button type="button" class="chip" aria-pressed="false">Art</button>
+          <button type="button" class="chip" aria-pressed="false">Cooking</button>
+          <button type="button" class="chip" aria-pressed="false">Pets</button>
+          <button type="button" class="chip" aria-pressed="false">Sports</button>
+        </div>
+      </div>
+      <div class="alert alert-error" data-form-alert hidden role="alert"><svg class="icon"><use href="#i-alert"/></svg><span></span></div>
+      <button class="btn btn-primary btn-block" type="submit">Finish</button>
+    </form>
+  </div>
+</section>
+
+<!-- Log in -->
+<section class="screen" id="login" data-chrome="none" aria-label="Log in">
+  <div class="auth">
+    <div class="auth-top">
+      <button class="icon-btn" data-go="landing" aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <a class="logo" href="#landing" data-go="landing"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <form class="auth-card" id="login-form" novalidate>
+      <h1>Welcome back</h1>
+      <div class="field">
+        <label for="li-email">Email</label>
+        <input class="input" id="li-email" type="email" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="li-pass">Password</label>
+        <input class="input" id="li-pass" type="password" autocomplete="current-password">
+      </div>
+      <div class="alert alert-error" id="li-err" hidden><svg class="icon"><use href="#i-lock"/></svg><span></span></div>
+      <button class="btn btn-primary btn-block" type="submit">Log in</button>
+      <button class="btn btn-text" type="button" data-go="reset">Forgot password?</button>
+      <p class="center small muted">New here? <a href="#signup" data-go="signup">Create an account</a></p>
+      <p class="center tiny muted" id="li-tip">Demo: any email and password will log you in.</p>
+    </form>
+  </div>
+</section>
+
+<!-- Password reset -->
+<section class="screen" id="reset" data-chrome="none" aria-label="Reset your password">
+  <div class="auth">
+    <div class="auth-top">
+      <button class="icon-btn" data-go="login" aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <a class="logo" href="#landing" data-go="landing"><span class="logo-mark" aria-hidden="true"></span>QuietFox<span class="beta-badge">Beta</span></a>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <form class="auth-card" id="reset-form" novalidate>
+      <h1>Reset your password</h1>
+      <p class="muted">Enter your account email and we'll send a reset link.</p>
+      <div class="field">
+        <label for="r-email">Email</label>
+        <input class="input" id="r-email" type="email" autocomplete="email">
+        <p class="error" id="r-email-err"></p>
+      </div>
+      <div class="alert alert-error" data-form-alert hidden role="alert"><svg class="icon"><use href="#i-alert"/></svg><span></span></div>
+      <button class="btn btn-primary btn-block" type="submit">Send reset link</button>
+    </form>
+    <form class="auth-card" id="reset-confirm-form" hidden novalidate>
+      <h1>Choose a new password</h1>
+      <div class="field">
+        <label for="rc-pass">New password</label>
+        <input class="input" id="rc-pass" type="password" autocomplete="new-password" aria-describedby="rc-hint">
+        <p class="hint" id="rc-hint">At least 8 characters.</p>
+        <p class="error" id="rc-err"></p>
+      </div>
+      <div class="alert alert-error" data-form-alert hidden role="alert"><svg class="icon"><use href="#i-alert"/></svg><span></span></div>
+      <button class="btn btn-primary btn-block" type="submit">Save new password</button>
+    </form>
+    <div class="auth-card" id="reset-confirm-done" hidden>
+      <span class="avatar" style="width: 64px; height: 64px"><svg class="icon"><use href="#i-check"/></svg></span>
+      <h1>Password updated</h1>
+      <p class="muted">You can log in with your new password now.</p>
+      <button class="btn btn-primary btn-block" data-go="login">Log in</button>
+    </div>
+    <div class="auth-card" id="reset-done" hidden>
+      <span class="avatar" style="width: 64px; height: 64px"><svg class="icon"><use href="#i-check"/></svg></span>
+      <h1>Check your email</h1>
+      <p class="muted">If that email has an account, a reset link is on its way. The link works for 1 hour.</p>
+      <button class="btn btn-ghost btn-block" data-go="login">Back to log in</button>
+    </div>
+  </div>
+</section>
+
+<!-- Terms of Service (beta draft)
+     Before QuietFox opens to the public, have a qualified lawyer review and complete this page. -->
+<section class="screen" id="terms" data-chrome="none" aria-label="Terms of Service">
+  <div class="page">
+    <div class="page-head">
+      <button class="icon-btn" data-back aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <h1>Terms of Service</h1>
+    <p class="muted" style="margin-top: 8px">Last updated October 6, 2026. By creating an account, you agree to these terms.</p>
+    <div class="stack gap-24" style="margin-top: 32px">
+      <div><h2>QuietFox is in beta</h2><p class="muted" style="margin-top: 6px">QuietFox is currently in beta. Features may change, be added, or be removed during the beta, and the service may sometimes be unavailable or not work as expected. We'll tell you about major changes in the app.</p></div>
+      <div><h2>Who can use QuietFox</h2><p class="muted" style="margin-top: 6px">You must be 18 or older and give your real date of birth. Each person may have one account, and each phone number can be linked to one account.</p></div>
+      <div><h2>Peer support, not therapy</h2><p class="muted" style="margin-top: 6px">QuietFox connects you with other people for conversation. It isn't a medical, mental health, or emergency service, and people on QuietFox aren't counselors. If you're in crisis, use the Help button, call or text 988 in the US, or call your local emergency number.</p></div>
+      <div><h2>Calls, messages, and privacy</h2><p class="muted" style="margin-top: 6px">Calls are never recorded. Messages are end-to-end encrypted, so QuietFox can't read them. If you report someone, the messages you choose to include are shared with our safety team. The <a href="#privacy" data-go="privacy">Privacy Policy</a> explains what we collect and why.</p></div>
+      <div><h2>Following the Community guidelines</h2><p class="muted" style="margin-top: 6px">You agree to follow the <a href="#guidelines" data-go="guidelines">Community guidelines</a>. If you don't, we may warn you, suspend your account, or ban your account and phone number.</p></div>
+      <div><h2>Reports, suspensions, and appeals</h2><p class="muted" style="margin-top: 6px">A serious report (sexual content, threats, or seeming to be under 18) can suspend your account right away. You can appeal once and return immediately, on probation. On probation, another serious report suspends your account until we review it. If we find that your appeal wasn't true, your account and phone number are permanently banned. For safety, matching may take longer for a while after a report, and account notices are sent on a schedule rather than right after a call.</p></div>
+      <div><h2>Ending your account</h2><p class="muted" style="margin-top: 6px">You can delete your account at any time in Settings. We keep reports and safety records after an account is deleted, as the <a href="#privacy" data-go="privacy">Privacy Policy</a> explains.</p></div>
+    </div>
+    <p class="copyright" style="margin-top: 48px">&copy; 2026 QuietFox. All rights reserved.</p>
+  </div>
+</section>
+
+<!-- Privacy Policy (beta draft)
+     Before QuietFox opens to the public, have a qualified lawyer review and complete this page,
+     and update it whenever you add a service (hosting, Twilio, email, TURN). -->
+<section class="screen" id="privacy" data-chrome="none" aria-label="Privacy Policy">
+  <div class="page">
+    <div class="page-head">
+      <button class="icon-btn" data-back aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <h1>Privacy Policy</h1>
+    <p class="muted" style="margin-top: 8px">Last updated October 7, 2026. QuietFox is in beta, and this policy may change as features change. We'll tell you about major changes in the app.</p>
+    <div class="stack gap-24" style="margin-top: 32px">
+      <div>
+        <h2>The short version</h2>
+        <p class="muted" style="margin-top: 6px">We collect what we need to run QuietFox and keep it safe. Calls are never recorded, and messages are end-to-end encrypted, so we can't listen to your calls or read your chats. We don't sell your information or show ads.</p>
+      </div>
+      <div>
+        <h2>What we collect</h2>
+        <ul class="muted" style="margin: 6px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px">
+          <li><strong>Your account:</strong> email address, a scrambled (hashed) version of your password, date of birth, and phone number.</li>
+          <li><strong>Your profile:</strong> display name, icon, short bio, and interests. Other people see these.</li>
+          <li><strong>Call records:</strong> who you talked with, when, for how long, and how the call ended. Not what was said.</li>
+          <li><strong>Things you choose to tell us:</strong> ratings, skip reasons, connection requests, reports, and feedback.</li>
+          <li><strong>Messages:</strong> stored only in encrypted form that we can't unlock.</li>
+          <li><strong>Safety records:</strong> reports about you and any warnings, suspensions, or bans.</li>
+          <li><strong>Technical information:</strong> the last time you were active, your browser and device type when you send feedback, and the IP addresses our web server records in its logs.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>What stays on your device</h2>
+        <p class="muted" style="margin-top: 6px">Your browser keeps your private encryption key, which unlocks your messages, and a login cookie. We never receive the private key. If you clear your browser data or switch devices, older messages can't be unlocked anymore.</p>
+      </div>
+      <div>
+        <h2>Calls</h2>
+        <p class="muted" style="margin-top: 6px">Calls connect directly between the two browsers and are encrypted. To set up a call, the two browsers briefly exchange connection details, including network addresses, through our server. We delete those details as soon as the call ends.</p>
+      </div>
+      <div>
+        <h2>Reports and notices</h2>
+        <p class="muted" style="margin-top: 6px">To protect people who report, notices about your account are sent once a day, at least 12 hours after a report, and matching may take longer for a short time after a report. You'll never see who reported you.</p>
+      </div>
+      <div>
+        <h2>Why we use it</h2>
+        <p class="muted" style="margin-top: 6px">To run your account, check that everyone is 18 or older, match you for calls, keep people safe, review reports, prevent abuse like repeat accounts, fix bugs, and understand how QuietFox is used.</p>
+      </div>
+      <div>
+        <h2>Reports</h2>
+        <p class="muted" style="margin-top: 6px">When you report someone from a chat, you can include recent messages. Your device unlocks them and sends them only to our safety team. The person you report isn't told who reported them.</p>
+      </div>
+      <div>
+        <h2>Who we share it with</h2>
+        <p class="muted" style="margin-top: 6px">Only the services that help run QuietFox: a text message provider that sends your verification code (it receives your phone number), an email provider that sends password-reset links (it receives your email address), and our web host. We may share information if the law requires it, or if we believe someone's life is in danger.</p>
+      </div>
+      <div>
+        <h2>Deleting your account</h2>
+        <p class="muted" style="margin-top: 6px">You can delete your account in Settings. That removes your account details, profile, connections, and messages. We keep reports, safety records, and call records with your account link removed, and banned phone numbers stay banned.</p>
+      </div>
+      <div>
+        <h2>Keeping it secure</h2>
+        <p class="muted" style="margin-top: 6px">Passwords are hashed, messages are end-to-end encrypted, and calls are encrypted. Encryption can't protect what's on your own screen, though: apps or browser extensions on your device that can read web pages may be able to see your chats once they're unlocked.</p>
+      </div>
+      <div>
+        <h2>Adults only</h2>
+        <p class="muted" style="margin-top: 6px">QuietFox isn't for anyone under 18. If we learn an account belongs to someone under 18, we'll close it.</p>
+      </div>
+      <div>
+        <h2>Questions</h2>
+        <p class="muted" style="margin-top: 6px">Email <a href="mailto:support@example.com">support@example.com</a>.</p>
+      </div>
+    </div>
+    <p class="copyright" style="margin-top: 48px">&copy; 2026 QuietFox. All rights reserved.</p>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="screen" id="contact" data-chrome="none" aria-label="Contact">
+  <div class="page">
+    <div class="page-head">
+      <button class="icon-btn" data-back aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <h1>Contact us</h1>
+    <p class="muted" style="margin-top: 8px">QuietFox is run by a small team. We read every message and usually reply within a few days.</p>
+    <div class="stack gap-24" style="margin-top: 32px">
+      <div class="alert"><svg class="icon"><use href="#i-help"/></svg><span>In danger right now? Call 911 or your local emergency number. For crisis support, tap Help.</span></div>
+      <div><h2>Help with your account</h2><p class="muted" style="margin-top: 6px">Questions, bugs, or trouble logging in: <a href="mailto:support@example.com">support@example.com</a>. You can also use Send feedback on any page.</p></div>
+      <div><h2>Safety concerns</h2><p class="muted" style="margin-top: 6px">The fastest way to report someone is the Report button in the call or chat. For anything else about safety: <a href="mailto:safety@example.com">safety@example.com</a>.</p></div>
+      <div><h2>Law enforcement requests</h2><p class="muted" style="margin-top: 6px">Law enforcement agencies can send legal requests to <a href="mailto:legal@example.com">legal@example.com</a>. Include the agency, the legal basis for the request, and a contact for verification. Calls are never recorded and messages are end-to-end encrypted, so we can't provide call audio or message contents.</p></div>
+    </div>
+    <p class="copyright" style="margin-top: 48px">&copy; 2026 QuietFox. All rights reserved.</p>
+  </div>
+</section>
+
+<!-- Community guidelines -->
+<section class="screen" id="guidelines" data-chrome="none" aria-label="Community guidelines">
+  <div class="page">
+    <div class="page-head">
+      <button class="icon-btn" data-back aria-label="Back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <div class="row gap-8"><button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button><button class="icon-btn" data-open="help-sheet" aria-label="Get help now" title="Help"><svg class="icon"><use href="#i-help"/></svg></button></div>
+    </div>
+    <h1>Community guidelines</h1>
+    <p class="muted" style="margin-top: 8px">QuietFox works because people treat each other gently. Breaking these rules can lead to a warning, a suspension, or a permanent ban.</p>
+    <div class="stack gap-24" style="margin-top: 32px">
+      <div><h2>Be kind</h2><p class="muted" style="margin-top: 6px">Listen without judging. No insults, threats, or hate based on who someone is.</p></div>
+      <div><h2>No threats or violence</h2><p class="muted" style="margin-top: 6px">Never threaten anyone, encourage violence, or talk about hurting someone else.</p></div>
+      <div><h2>Keep it clean</h2><p class="muted" style="margin-top: 6px">No sexual talk, no requests for photos, and no pressure to take a conversation anywhere else.</p></div>
+      <div><h2>Protect your privacy, and theirs</h2><p class="muted" style="margin-top: 6px">Don't share or ask for real names, phone numbers, addresses, schools, workplaces, or social media accounts.</p></div>
+      <div><h2>Adults only</h2><p class="muted" style="margin-top: 6px">Everyone must be 18 or older. If someone seems younger, end the call and report them as "Seems underage."</p></div>
+      <div><h2>Peer support, not therapy</h2><p class="muted" style="margin-top: 6px">People here are friends, not counselors. If someone mentions hurting themselves, share the Help button and report with "I'm worried about this person" so our team can follow up.</p></div>
+      <div><h2>No spam or selling</h2><p class="muted" style="margin-top: 6px">Don't advertise, promote your channels or pages, or ask people for money.</p></div>
+      <div><h2>Don't record, screenshot, or stream</h2><p class="muted" style="margin-top: 6px">Never record, screenshot, or livestream a call or chat without the other person's clear permission. People come here expecting privacy.</p></div>
+      <div><h2>Report honestly</h2><p class="muted" style="margin-top: 6px">Reports keep people safe, so use them only for real problems. False reports, joke reports, and reporting someone as revenge are violations too, and can lead to a warning or more.</p></div>
+      <div><h2>Skip honestly</h2><p class="muted" style="margin-top: 6px">Skipping is fine. Picking a real reason helps us find people who make others uncomfortable.</p></div>
+    </div>
+    <p class="copyright" style="margin-top: 48px">&copy; 2026 QuietFox. All rights reserved.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     SIGNED-IN SCREENS
+     ========================================================= -->
+
+<!-- Home -->
+<section class="screen" id="home" data-chrome="app" aria-label="Home">
+  <div class="page">
+    <div class="home">
+      <p class="muted" style="font-weight: 600" id="home-greeting">Good evening</p>
+      <h1 style="margin-top: 8px">Long day? Someone's<br>up to listen.</h1>
+      <div class="start-orb-wrap"><div>
+        <button class="start-orb" id="start-btn"><svg class="icon"><use href="#i-mic"/></svg>Start talking</button>
+      </div></div>
+      <p class="online" style="margin-top: 40px"><span id="online-count">0</span>&nbsp;people awake right now</p>
+      <p class="tiny muted" style="margin-top: 6px">Voice only. One-on-one. No real names.</p>
+      <div class="card note-card" style="margin-top: 36px; width: 100%">
+        <svg class="icon"><use href="#i-heart"/></svg>
+        <p class="small muted">Be kind, keep personal info private, and remember this is a friend to talk to, not therapy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Microphone blocked -->
+<section class="screen" id="mic" data-chrome="none" aria-label="Microphone needed">
+  <div class="focus">
+    <div class="focus-head">
+      <button class="icon-btn" data-go="home" aria-label="Back to home"><svg class="icon"><use href="#i-back"/></svg></button>
+      <div class="row gap-8">
+        <button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button>
+        <button class="help-btn" data-open="help-sheet" aria-label="Get help now"><svg class="icon"><use href="#i-help"/></svg>Help</button>
+      </div>
+    </div>
+    <div class="focus-body" style="padding-top: 48px">
+      <span class="avatar" style="width: 96px; height: 96px"><svg class="icon" style="width: 40px; height: 40px"><use href="#i-mic-off"/></svg></span>
+      <h1 style="margin-top: 24px">QuietFox needs your microphone</h1>
+      <p class="muted" style="margin-top: 10px; max-width: 34ch">Your browser blocked microphone access, so we can't start a call. Calls are never recorded.</p>
+      <ol class="card" style="margin: 28px 0 0; padding: 18px 18px 18px 40px; text-align: left; width: 100%; display: flex; flex-direction: column; gap: 10px">
+        <li>Click the lock icon next to the web address.</li>
+        <li>Set Microphone to Allow.</li>
+        <li>Come back here and tap Try again.</li>
+      </ol>
+    </div>
+    <div class="stack gap-8" style="padding: 24px 0 8px">
+      <button class="btn btn-primary btn-block" id="mic-retry">Try again</button>
+      <button class="btn btn-ghost btn-block" data-go="home">Back to home</button>
+    </div>
+  </div>
+</section>
+
+<!-- Waiting for a match -->
+<section class="screen" id="waiting" data-chrome="none" aria-label="Finding someone">
+  <div class="focus">
+    <div class="focus-head">
+      <button class="icon-btn" id="wait-back" aria-label="Cancel and go back"><svg class="icon"><use href="#i-back"/></svg></button>
+      <div class="row gap-8">
+        <button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button>
+        <button class="help-btn" data-open="help-sheet" aria-label="Get help now"><svg class="icon"><use href="#i-help"/></svg>Help</button>
+      </div>
+    </div>
+    <div class="focus-body">
+      <h1>Finding someone<br>who's awake…</h1>
+      <p class="small muted" style="margin-top: 10px"><span id="online-count-2">0</span> people are online. This usually takes a moment.</p>
+      <div class="breath" aria-hidden="true"><span class="ring r1"></span><span class="ring r2"></span><span class="core"></span></div>
+      <p aria-live="polite" style="margin-top: 32px; font-size: 18px; font-weight: 700" id="breath-label">Breathe in…</p>
+      <p class="tiny muted" style="margin-top: 4px">Follow the glow while you wait</p>
+    </div>
+    <div class="card card-outline" style="margin-top: 24px">
+      <h3>Before you connect</h3>
+      <ul class="small muted" style="margin: 10px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px">
+        <li>Be gentle. They may be having a hard day too.</li>
+        <li>No real names, numbers, or socials.</li>
+        <li>You can skip after a minute and share why.</li>
+      </ul>
+    </div>
+    <div style="padding: 16px 0 8px">
+      <button class="btn btn-ghost btn-block" id="wait-cancel">Cancel</button>
+    </div>
+  </div>
+</section>
+
+<!-- Voice call -->
+<section class="screen" id="call" data-chrome="none" aria-label="Voice call">
+  <div class="focus">
+    <div class="focus-head">
+      <span class="timer-pill"><span class="sr-only">Call time</span><span id="call-clock">0:00</span></span>
+      <div class="row gap-8">
+        <button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button>
+        <button class="help-btn" data-open="help-sheet" aria-label="Get help now"><svg class="icon"><use href="#i-help"/></svg>Help</button>
+      </div>
+    </div>
+    <div class="focus-body" style="padding-top: 48px">
+      <span class="avatar avatar-lg"><svg class="icon"><use href="#a-owl"/></svg></span>
+      <h1 style="margin-top: 24px" id="call-name">Night Owl</h1>
+      <p class="small muted" style="margin-top: 6px" id="call-bio">Into rain sounds, old movies, and late-night walks</p>
+      <p class="e2e" style="margin-top: 12px; cursor: default"><svg class="icon"><use href="#i-lock"/></svg>End-to-end encrypted</p>
+      <div class="wave" id="wave" aria-hidden="true">
+        <span style="height: 16px"></span><span style="height: 30px; animation-delay: .2s"></span><span style="height: 40px; animation-delay: .4s"></span><span style="height: 24px; animation-delay: .6s"></span><span style="height: 34px; animation-delay: .8s"></span><span style="height: 18px; animation-delay: 1s"></span><span style="height: 28px; animation-delay: 1.2s"></span>
+      </div>
+      <p class="tiny muted" style="margin-top: 10px" id="call-status">Connected</p>
+      <p class="tiny" style="margin-top: 4px; color: var(--lamp)" id="call-quality" hidden>Weak connection. Voices may sound choppy.</p>
+    </div>
+    <div class="call-controls">
+      <div class="ctrl">
+        <button id="mute-btn" aria-pressed="false" aria-label="Mute microphone"><svg class="icon"><use href="#i-mic"/></svg></button>
+        <span id="mute-text">Mute</span>
+      </div>
+      <div class="ctrl">
+        <button class="end" id="end-btn" aria-label="End call"><svg class="icon" style="width: 32px; height: 32px"><use href="#i-end"/></svg></button>
+        <span>End</span>
+      </div>
+      <div class="ctrl">
+        <button data-report="call" aria-label="Report or block"><svg class="icon"><use href="#i-flag"/></svg></button>
+        <span>Report</span>
+      </div>
+    </div>
+    <div style="padding: 28px 0 8px" id="skip-row">
+      <button class="btn btn-block" id="skip-btn" disabled><svg class="icon" style="width: 18px; height: 18px"><use href="#i-lock"/></svg><span id="skip-text">Skip unlocks in 1:00</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- After the call -->
+<section class="screen" id="aftercall" data-chrome="none" aria-label="Call ended">
+  <div class="focus">
+    <div class="focus-head" style="justify-content: flex-end">
+      <div class="row gap-8">
+        <button class="icon-btn" data-open="feedback-sheet" aria-label="Send feedback" title="Send feedback"><svg class="icon"><use href="#i-feedback"/></svg></button>
+        <button class="help-btn" data-open="help-sheet" aria-label="Get help now"><svg class="icon"><use href="#i-help"/></svg>Help</button>
+      </div>
+    </div>
+    <div class="stack" style="align-items: center; text-align: center; padding-top: 32px">
+      <span class="logo-mark" style="width: 128px; height: 128px; background: var(--logo) center / contain no-repeat; box-shadow: 0 0 60px 6px var(--lamp-glow)" aria-hidden="true"></span>
+      <h1 style="margin-top: 22px">Thanks for being there</h1>
+      <p class="muted" style="margin-top: 6px">You talked with <span data-partner>Night Owl</span> for <span id="after-duration">0:00</span></p>
+    </div>
+    <div class="card" style="margin-top: 32px">
+      <h3 id="rate-label">How did that feel?</h3>
+      <div role="group" aria-labelledby="rate-label" style="margin-top: 12px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <button class="choice" style="justify-content: center" aria-checked="false" data-rate="up"><svg class="icon" style="width: 20px; height: 20px"><use href="#i-thumb-up"/></svg>Helped</button>
+        <button class="choice" style="justify-content: center" aria-checked="false" data-rate="down"><svg class="icon" style="width: 20px; height: 20px"><use href="#i-thumb-down"/></svg>Not really</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top: 12px" id="connect-card">
+      <div id="connect-ask">
+        <h3>Stay connected with <span data-partner>Night Owl</span>?</h3>
+        <p class="small muted" style="margin-top: 6px">Messaging only opens if you both say yes. Your details stay private either way.</p>
+        <button class="btn btn-outline-lamp btn-block" style="margin-top: 14px; min-height: 50px" id="connect-btn">Send a request</button>
+      </div>
+      <div id="connect-sent" class="row gap-12" style="align-items: flex-start" hidden>
+        <svg class="icon" style="color: var(--mint)"><use href="#i-check"/></svg>
+        <div><h3>Request sent</h3><p class="small muted" style="margin-top: 4px">If <span data-partner>Night Owl</span> says yes too, you'll find them in Connections.</p></div>
+      </div>
+    </div>
+    <div style="flex: 1; min-height: 24px"></div>
+    <div class="stack gap-8" style="padding-bottom: 8px">
+      <button class="btn btn-primary btn-block" data-go="home">I'm ready to sleep</button>
+      <button class="btn btn-ghost btn-block" id="talk-again">Talk to someone new</button>
+      <button class="btn btn-text" data-report="aftercall">Report or block <span data-partner>Night Owl</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- Connections -->
+<section class="screen" id="connections" data-chrome="app" aria-label="Connections">
+  <div class="page">
+    <div class="page-head"><h1>Connections</h1></div>
+
+    <div id="requests-block">
+      <h2 class="section-title">Requests</h2>
+      <div class="card card-outline row gap-12" id="request-card" style="flex-wrap: wrap">
+        <span class="avatar"><svg class="icon"><use href="#a-bear"/></svg></span>
+        <div style="flex: 1; min-width: 160px">
+          <h3>Sleepy Bear</h3>
+          <p class="small muted">Wants to stay connected after your call last night</p>
+        </div>
+        <div class="row gap-8">
+          <button class="btn btn-ghost" style="min-height: 44px; padding: 0 16px" id="req-decline">Decline</button>
+          <button class="btn btn-primary" style="min-height: 44px; padding: 0 16px" id="req-accept">Accept</button>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Your people</h2>
+    <div class="list" id="conn-list"><!-- filled by JavaScript --></div>
+    <p class="empty" id="conn-empty" hidden>No connections yet. After a good call, tap "Send a request" to stay in touch.</p>
+  </div>
+</section>
+
+<!-- Chat -->
+<section class="screen" id="chat" data-chrome="app" aria-label="Chat">
+  <div class="chat" style="position: relative">
+    <div class="chat-head">
+      <button class="icon-btn" data-go="connections" aria-label="Back to connections"><svg class="icon"><use href="#i-back"/></svg></button>
+      <span class="avatar" id="chat-avatar"><svg class="icon"><use href="#a-owl"/></svg></span>
+      <div class="grow">
+        <h3 id="chat-name">Night Owl</h3>
+        <button class="e2e" id="chat-e2e" aria-label="Messages are end-to-end encrypted. View security code"><svg class="icon"><use href="#i-lock"/></svg>End-to-end encrypted</button>
+      </div>
+      <button class="icon-btn" id="chat-call" aria-label="Start a voice call"><svg class="icon"><use href="#i-phone"/></svg></button>
+      <button class="icon-btn" id="chat-more" aria-haspopup="true" aria-expanded="false" aria-label="More options"><svg class="icon"><use href="#i-more"/></svg></button>
+      <div class="menu" id="chat-menu" hidden>
+        <button data-report="chat"><svg class="icon"><use href="#i-flag"/></svg>Report</button>
+        <button id="chat-remove"><svg class="icon"><use href="#i-user-x"/></svg>Remove connection</button>
+        <button class="danger" id="chat-block"><svg class="icon"><use href="#i-block"/></svg>Block</button>
+      </div>
+    </div>
+    <div class="messages" id="messages" aria-live="polite"><!-- filled by JavaScript --></div>
+    <form class="composer" id="composer" novalidate>
+      <div class="alert" id="pii-warning" hidden>
+        <svg class="icon"><use href="#i-eye-off"/></svg>
+        <span>This message looks like it includes <strong id="pii-kind">contact info</strong>. To keep you both safe, QuietFox doesn't send phone numbers, emails, addresses, or social handles.</span>
+      </div>
+      <div class="composer-row">
+        <label for="msg-input" class="sr-only">Message</label>
+        <textarea class="input" id="msg-input" rows="1" maxlength="1000" placeholder="Write a message"></textarea>
+        <button class="send-btn" id="send-btn" type="submit" aria-label="Send message" disabled><svg class="icon"><use href="#i-send"/></svg></button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Settings -->
+<section class="screen" id="settings" data-chrome="app" aria-label="Settings">
+  <div class="page">
+    <div class="page-head"><h1>Settings</h1></div>
+
+    <form class="card stack gap-16" id="settings-profile" novalidate>
+      <div class="row gap-12">
+        <span class="avatar" id="settings-avatar"><svg class="icon"><use href="#a-fox"/></svg></span>
+        <div><h3>Profile</h3><p class="tiny muted">What people see on a call</p></div>
+      </div>
+      <div class="field">
+        <label for="s-name">Display name</label>
+        <input class="input" id="s-name" maxlength="24" value="Quiet Moon">
+      </div>
+      <div class="field">
+        <label for="s-bio">Short bio</label>
+        <textarea class="input" id="s-bio" maxlength="120">Night shift nurse. Here for slow, kind conversations.</textarea>
+      </div>
+      <button class="btn btn-primary" type="submit" style="align-self: flex-start">Save profile</button>
+    </form>
+
+    <!-- Notification settings will go here once QuietFox can send email or push notifications. -->
+
+    <h2 class="section-title">Blocked people</h2>
+    <div class="card" style="padding: 6px">
+      <div class="list" id="blocked-list"><!-- filled by JavaScript --></div>
+      <p class="empty small" id="blocked-empty" style="padding: 20px" hidden>You haven't blocked anyone.</p>
+    </div>
+
+    <h2 class="section-title">Password</h2>
+    <form class="card stack gap-16" id="password-form" novalidate>
+      <div class="field">
+        <label for="pw-current">Current password</label>
+        <input class="input" id="pw-current" type="password" autocomplete="current-password">
+      </div>
+      <div class="field">
+        <label for="pw-new">New password</label>
+        <input class="input" id="pw-new" type="password" autocomplete="new-password">
+        <p class="hint">At least 8 characters.</p>
+        <p class="error" id="pw-err"></p>
+      </div>
+      <button class="btn btn-ghost" type="submit" style="align-self: flex-start">Change password</button>
+    </form>
+
+    <h2 class="section-title">About</h2>
+    <div class="card stack gap-8">
+      <a href="#guidelines" data-go="guidelines">Community guidelines</a>
+      <a href="#terms" data-go="terms">Terms of Service</a>
+      <a href="#privacy" data-go="privacy">Privacy Policy</a>
+      <a href="#contact" data-go="contact">Contact us</a>
+      <p class="copyright" style="margin-top: 8px">&copy; 2026 QuietFox. All rights reserved.</p>
+    </div>
+
+    <div class="stack gap-8" style="margin-top: 32px">
+      <button class="btn btn-ghost btn-block" id="logout-btn">Log out</button>
+      <button class="btn btn-text" style="color: var(--coral)" data-open="delete-sheet">Delete account</button>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+</main>
+
+<!-- Mobile tab bar -->
+<nav class="tabbar" aria-label="Main">
+  <button class="tab" data-go="home" data-nav="home"><svg class="icon"><use href="#i-moon"/></svg>Talk</button>
+  <button class="tab" data-go="connections" data-nav="connections"><svg class="icon"><use href="#i-chat"/></svg>Connections<span class="badge" aria-label="1 new request">1</span></button>
+  <button class="tab" data-go="settings" data-nav="settings"><svg class="icon"><use href="#i-settings"/></svg>Settings</button>
+</nav>
+
+<!-- ===== Sheets (open with data-open="id") ===== -->
+
+<!-- Crisis help: reachable from every screen -->
+<dialog class="sheet" id="help-sheet" aria-labelledby="help-title">
+  <div class="sheet-body">
+    <span class="sheet-handle"></span>
+    <div class="sheet-head">
+      <h2 id="help-title" tabindex="-1" autofocus>Talk to a trained counselor now</h2>
+      <button class="icon-btn" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <p class="small muted">If you're thinking about hurting yourself, or you're not safe right now, these lines are free and open all night.</p>
+    <div class="stack gap-12" id="help-lines">
+    <div class="helpline">
+      <div><h3>988 Suicide &amp; Crisis Lifeline</h3><p class="tiny muted">United States. Call or text 988.</p></div>
+      <div class="helpline-actions">
+        <a class="btn btn-primary" href="tel:988">Call</a>
+        <a class="btn btn-ghost" href="sms:988">Text</a>
+      </div>
+    </div>
+    <div class="helpline">
+      <div><h3>Outside the US</h3><p class="tiny muted">Find a free helpline in your country.</p></div>
+      <div class="helpline-actions"><a class="btn btn-ghost" href="https://findahelpline.com" target="_blank" rel="noopener">Find a line</a></div>
+    </div>
+    </div>
+    <div class="alert"><svg class="icon"><use href="#i-help"/></svg><span>In immediate danger? Call 911 or your local emergency number.</span></div>
+  </div>
+</dialog>
+
+<!-- Report (calls, chats, after-call) -->
+<dialog class="sheet" id="report-sheet" aria-labelledby="report-title">
+  <form class="sheet-body" id="report-form" method="dialog" novalidate>
+    <span class="sheet-handle"></span>
+    <div class="sheet-head">
+      <div>
+        <h2 id="report-title" tabindex="-1" autofocus>Report <span data-report-name>Night Owl</span></h2>
+        <p class="small muted" style="margin-top: 4px">Reports are private. A person on our team reviews every one.</p>
+      </div>
+      <button class="icon-btn" type="button" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="choices" role="radiogroup" aria-label="What happened?" data-choice-group="report">
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="worried" style="border-color: var(--lamp)"><span class="dot"></span><span><strong>I'm worried about this person</strong><br><span class="tiny muted">They may be in danger. We review these first.</span></span></button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="harassment"><span class="dot"></span>Harassment or bullying</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="sexual"><span class="dot"></span>Sexual content</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="hate"><span class="dot"></span>Hate</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="threats"><span class="dot"></span>Threats or violence</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="underage"><span class="dot"></span>Seems under 18</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="selfharm"><span class="dot"></span>Talked about hurting themselves</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="spam"><span class="dot"></span>Spam</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="other"><span class="dot"></span>Something else</button>
+    </div>
+    <p class="error" id="report-err"></p>
+    <div class="field">
+      <label for="report-details">What happened? (optional)</label>
+      <textarea class="input" id="report-details" maxlength="500"></textarea>
+    </div>
+    <label class="check" id="report-include-row" hidden><input type="checkbox" id="report-include" checked><span>Include the last 20 messages. They're unlocked on your device and sent only to the QuietFox safety team, which can check that they're real.</span></label>
+    <label class="check"><input type="checkbox" id="report-block" checked><span>Also block <span data-report-name>Night Owl</span>. This ends the call and you won't be matched or messaged again.</span></label>
+    <button class="btn btn-primary btn-block" type="submit">Send report</button>
+  </form>
+</dialog>
+
+<!-- Skip reason -->
+<dialog class="sheet" id="skip-sheet" aria-labelledby="skip-title">
+  <form class="sheet-body" id="skip-form" method="dialog" novalidate>
+    <span class="sheet-handle"></span>
+    <div>
+      <h2 id="skip-title" tabindex="-1" autofocus>Why are you skipping?</h2>
+      <p class="small muted" style="margin-top: 4px">Only the QuietFox team sees this. It helps keep calls kind.</p>
+    </div>
+    <div class="choices" role="radiogroup" aria-label="Skip reason" data-choice-group="skip">
+      <button type="button" class="choice" role="radio" aria-checked="true" data-value="click"><span class="dot"></span>We just weren't clicking</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="vibe"><span class="dot"></span>Not the conversation I need tonight</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="audio"><span class="dot"></span>Audio or connection trouble</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="away"><span class="dot"></span>I need to step away</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="uncomfortable"><span class="dot"></span>They made me uncomfortable</button>
+      <button type="button" class="choice" role="radio" aria-checked="false" data-value="other"><span class="dot"></span>Something else</button>
+    </div>
+    <div class="alert" id="skip-report-hint" hidden>
+      <svg class="icon"><use href="#i-flag"/></svg>
+      <span>If they broke the rules, <button type="button" id="skip-to-report" style="background: none; border: 0; padding: 0; color: var(--lamp); font-weight: 800; cursor: pointer; text-decoration: underline">report them instead</button>. You can block them at the same time.</span>
+    </div>
+    <div class="field">
+      <label for="skip-note">Anything to add? (optional)</label>
+      <textarea class="input" id="skip-note" maxlength="300" placeholder="A few words is plenty" style="min-height: 64px"></textarea>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">Skip and find someone new</button>
+    <button class="btn btn-text" type="button" data-close>Stay on the call</button>
+  </form>
+</dialog>
+
+
+
+
+<!-- Beta feedback -->
+<dialog class="sheet" id="feedback-sheet" aria-labelledby="feedback-title">
+  <form class="sheet-body" id="feedback-form" method="dialog" novalidate>
+    <span class="sheet-handle"></span>
+    <div class="sheet-head">
+      <div>
+        <h2 id="feedback-title" tabindex="-1" autofocus>Send feedback</h2>
+        <p class="small muted" style="margin-top: 4px">QuietFox is in beta. Tell us what's broken, confusing, or missing. This goes to the QuietFox team, not to other people on the app.</p>
+      </div>
+      <button class="icon-btn" type="button" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="chips" role="radiogroup" aria-label="Type of feedback" id="feedback-kind">
+      <button type="button" class="chip" role="radio" aria-checked="true" aria-pressed="true" data-kind="bug">Something's broken</button>
+      <button type="button" class="chip" role="radio" aria-checked="false" aria-pressed="false" data-kind="idea">An idea</button>
+      <button type="button" class="chip" role="radio" aria-checked="false" aria-pressed="false" data-kind="other">Something else</button>
+    </div>
+    <div class="field">
+      <label for="feedback-message">What happened, or what would make QuietFox better?</label>
+      <textarea class="input" id="feedback-message" maxlength="2000" placeholder="A sentence or two is plenty"></textarea>
+      <p class="error" id="feedback-err"></p>
+    </div>
+    <label class="check"><input type="checkbox" id="feedback-screen" checked><span>Include which screen I'm on, to help us find the problem. Your browser and device type are always included.</span></label>
+    <div class="alert"><svg class="icon"><use href="#i-help"/></svg><span>Need to talk to someone right now? Use the Help button instead. Feedback isn't checked around the clock.</span></div>
+    <button class="btn btn-primary btn-block" type="submit">Send feedback</button>
+  </form>
+</dialog>
+
+<!-- Rules reminder before calling a connection -->
+<dialog class="sheet" id="call-rules-sheet" aria-labelledby="call-rules-title">
+  <div class="sheet-body">
+    <span class="sheet-handle"></span>
+    <h2 id="call-rules-title" tabindex="-1" autofocus>Before you call <span data-partner>Night Owl</span></h2>
+    <ul class="small muted" style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px">
+      <li>Be gentle. They may be having a hard day too.</li>
+      <li>Keep real names, numbers, and socials private.</li>
+      <li>Don't record, screenshot, or stream the call.</li>
+    </ul>
+    <button class="btn btn-primary btn-block" id="call-rules-go">Call now</button>
+    <button class="btn btn-text" type="button" data-close>Not now</button>
+  </div>
+</dialog>
+
+
+
+<!-- Encryption info + security code -->
+<dialog class="sheet" id="e2e-sheet" aria-labelledby="e2e-title">
+  <div class="sheet-body">
+    <span class="sheet-handle"></span>
+    <div class="sheet-head">
+      <h2 id="e2e-title" tabindex="-1" autofocus>Your chat with <span data-partner>Night Owl</span> is end-to-end encrypted</h2>
+      <button class="icon-btn" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+    </div>
+    <p class="small muted">Messages and calls are locked on your device before they're sent. Only the two of you can read or hear them. QuietFox stores scrambled text it can't unlock.</p>
+    <p class="small muted">If you report someone, the messages you choose to include are unlocked on your device and sent only to our safety team.</p>
+    <div>
+      <p class="label" style="margin-bottom: 8px">Security code</p>
+      <p class="security-code" id="security-code" aria-live="polite">Working it out…</p>
+      <p class="tiny muted" style="margin-top: 8px">Read this out on a call with <span data-partner>Night Owl</span>. If you both see the same code, nobody is secretly in the middle of your chat.</p>
+    </div>
+  </div>
+</dialog>
+
+<!-- Delete account -->
+<dialog class="sheet" id="delete-sheet" aria-labelledby="delete-title">
+  <form class="sheet-body" id="delete-form" method="dialog" novalidate>
+    <span class="sheet-handle"></span>
+    <h2 id="delete-title" tabindex="-1" autofocus>Delete your account?</h2>
+    <p class="small muted">This removes your profile, connections, and messages, and you can't undo it. We keep reports and safety records, as the Privacy Policy explains.</p>
+    <div class="field">
+      <label for="del-pass">Enter your password to confirm</label>
+      <input class="input" id="del-pass" type="password" autocomplete="current-password">
+      <p class="error" id="del-err"></p>
+    </div>
+    <button class="btn btn-danger btn-block" type="submit">Delete my account</button>
+    <button class="btn btn-text" type="button" data-close>Keep my account</button>
+  </form>
+</dialog>
+
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Demo: jump to any screen -->
+<div class="jumper">
+  <div class="menu" id="jump-menu" hidden></div>
+  <div class="demo-ribbon" role="note">Demo &middot; sample data, no real calls</div>
+  <button id="jump-btn" aria-haspopup="true" aria-expanded="false" aria-label="Jump to a screen (prototype only)"><span class="jump-short" aria-hidden="true">&#8801;</span><span class="jump-long">Screens</span></button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
