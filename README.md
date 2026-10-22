@@ -60,4 +60,4 @@ QuietFox is designed around privacy first: anonymous accounts, no stored audio o
 
 ## Copyright
 
-© 2020–2026 Zachary James. All rights reserved. See [LICENSE](LICENSE).
+© 2026 Zachary James. All rights reserved. See [LICENSE](LICENSE).
